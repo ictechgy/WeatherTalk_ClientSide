@@ -8,6 +8,36 @@
 import SwiftUI
 import ComposableArchitecture
 
+// MARK: - Coordinator
+
+final class ListCoordinator: Coordinator {
+    let store: StoreOf<AppReducer>
+    let navigationController: UINavigationController
+    private(set) var children: [any Coordinator] = []
+    
+    init(store: StoreOf<AppReducer>, navigationController: UINavigationController) {
+        self.store = store
+        self.navigationController = navigationController
+    }
+    
+    func toDetailView() {
+        navigationController.pushViewController(makeDetailView(), animated: true)
+    }
+}
+
+extension ListCoordinator {
+    private func makeDetailView() -> UIViewController {
+        let detailView = DetailView(store: self.store, coordinator: makeDetailCoordinator())
+        let detailHostingViewController = UIHostingController(rootView: detailView)
+        
+        return detailHostingViewController
+    }
+    
+    private func makeDetailCoordinator() -> DetailCoordinator {
+        DetailCoordinator(store: self.store, navigationController: navigationController)
+    }
+}
+
 // MARK: - Feature Domain
 
 struct FriendListCore: Reducer {
@@ -51,29 +81,5 @@ struct FriendListView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(coordinator: ContentCoordinator(navigationController: UINavigationController()))
-    }
-}
-
-final class ContentCoordinator: Coordinator {
-    let navigationController: UINavigationController
-    private(set) var children: [Coordinator] = []
-    
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-    }
-    
-    func toDetailView() {
-        navigationController.pushViewController(makeDetailView(), animated: true)
-    }
-    
-    private func makeDetailView() -> UIViewController {
-        let detailView = DetailView(coordinator: makeDetailCoordinator())
-        let detailHostingViewController = UIHostingController(rootView: detailView)
-        
-        return detailHostingViewController
-    }
-    
-    private func makeDetailCoordinator() -> DetailCoordinator {
-        DetailCoordinator(navigationController: navigationController)
     }
 }

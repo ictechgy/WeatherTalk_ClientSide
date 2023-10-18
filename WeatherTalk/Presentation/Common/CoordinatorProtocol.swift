@@ -11,7 +11,9 @@ import ComposableArchitecture
 // MARK: - Coordinator 기본구조
 
 protocol Coordinator {
-    var store: Store<Any, Any> { get }
+    associatedtype CoreStore: StoreOf<Reducer>
+    
+    var store: CoreStore { get }
     var navigationController: UINavigationController { get }
-    var children: [Coordinator] { get }
+    var children: [any Coordinator] { get }
 }
