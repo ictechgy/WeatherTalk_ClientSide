@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 // MARK: - Coordinator
 
-final class ListCoordinator: Coordinator {
+final class FriendListCoordinator: Coordinator {
     let store: StoreOf<AppReducer>
     let navigationController: UINavigationController
     private(set) var children: [any Coordinator] = []
@@ -25,7 +25,7 @@ final class ListCoordinator: Coordinator {
     }
 }
 
-extension ListCoordinator {
+extension FriendListCoordinator {
     private func makeDetailView() -> UIViewController {
         let detailView = DetailView(store: self.store, coordinator: makeDetailCoordinator())
         let detailHostingViewController = UIHostingController(rootView: detailView)
@@ -66,13 +66,15 @@ struct FriendListCore: Reducer {
 // MARK: - Feature View
 
 struct FriendListView: View {
-    let store: StoreOf<FriendListCore>
+    let store: StoreOf<AppReducer>
     let coordinator: FriendListCoordinator
     
     var body: some View {
-        List {
-            ForEachStore(self.store) { store in
-                FriendCellView()
+        WithViewStore(self.store, observe: { _ in FriendListCore() }) { viewStore in
+            List {
+                ForEachStore(viewStore) { store in
+                    FriendCellView()
+                }
             }
         }
     }

@@ -25,8 +25,8 @@ final class AppCoordinator: Coordinator {
         return NavigationControllerView(rootView: listView, navigationController: navigationController)
     }
     
-    private func makeListCoordinator() -> ListCoordinator {
-        ListCoordinator(store: self.store, navigationController: self.navigationController)
+    private func makeListCoordinator() -> FriendListCoordinator {
+        FriendListCoordinator(store: self.store, navigationController: self.navigationController)
     }
 }
 
@@ -47,7 +47,7 @@ struct NavigationControllerView<RootContent: View>: UIViewControllerRepresentabl
 // MARK: - Feature Domain
 
 struct AppReducer: Reducer {
-    struct State {
+    struct State: Equatable {
         
     }
     
