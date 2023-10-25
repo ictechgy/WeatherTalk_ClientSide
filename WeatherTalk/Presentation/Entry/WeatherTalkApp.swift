@@ -48,7 +48,7 @@ struct NavigationControllerView<RootContent: View>: UIViewControllerRepresentabl
 
 struct AppReducer: Reducer {
     struct State: Equatable {
-        
+        var friendList: IdentifiedArrayOf<[User]> = []
     }
     
     enum Action {

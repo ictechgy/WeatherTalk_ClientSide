@@ -43,6 +43,10 @@ extension FriendListCoordinator {
 struct FriendListCore: Reducer {
     struct State: Equatable {
         var friendList: IdentifiedArrayOf<[User]>
+        
+        init(friendList: IdentifiedArrayOf<[User]>) {
+            self.friendList = friendList
+        }
     }
     
     enum Action {
@@ -66,14 +70,14 @@ struct FriendListCore: Reducer {
 // MARK: - Feature View
 
 struct FriendListView: View {
-    let store: StoreOf<AppReducer>
+    let store: StoreOf<FriendListCore>
     let coordinator: FriendListCoordinator
     
     var body: some View {
-        WithViewStore(self.store, observe: { _ in FriendListCore() }) { viewStore in
+        WithViewStore(self.store) { $0 } content: { viewStore in
             List {
                 ForEachStore(viewStore) { store in
-                    FriendCellView()
+//                    FriendCellView()
                 }
             }
         }
