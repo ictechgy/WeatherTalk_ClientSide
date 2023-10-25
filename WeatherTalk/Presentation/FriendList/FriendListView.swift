@@ -42,9 +42,9 @@ extension FriendListCoordinator {
 
 struct FriendListCore: Reducer {
     struct State: Equatable {
-        var friendList: IdentifiedArrayOf<[User]>
+        var friendList: IdentifiedArrayOf<[Friend]>
         
-        init(friendList: IdentifiedArrayOf<[User]>) {
+        init(friendList: IdentifiedArrayOf<[Friend]>) {
             self.friendList = friendList
         }
     }
@@ -53,6 +53,7 @@ struct FriendListCore: Reducer {
         case viewOnAppear
         case friendTapped
         case addFriend
+        case cellAction(_ id: )
     }
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
@@ -62,6 +63,8 @@ struct FriendListCore: Reducer {
         case .friendTapped:
             break
         case .addFriend:
+            break
+        case .cellAction:
             break
         }
     }
@@ -76,7 +79,9 @@ struct FriendListView: View {
     var body: some View {
         WithViewStore(self.store) { $0 } content: { viewStore in
             List {
-                ForEachStore(viewStore) { store in
+                ForEachStore(
+                    self.store.scope(state: \.friendList, action: { _ in .cellAction })
+                ) { store in
 //                    FriendCellView()
                 }
             }
