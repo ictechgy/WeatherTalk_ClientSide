@@ -10,19 +10,21 @@ import ComposableArchitecture
 
 // MARK: - Feature Domain
 
-struct FriendCore: Reducer {
+struct FriendCellCore: Reducer {
     // 어디서는 ViewState/ViewAction이라 하고 어디서는 State/Action이라 하는데 그 기준은?
-    struct ViewState: Equatable {
-        var user: User
+    struct State: Equatable {
+        var image: Image?
+        var userName: String
+        var description: String
     }
     
-    enum ViewAction {
-        case userTapped
+    enum Action {
+        case cellTapped
     }
     
-    func reduce(into state: inout ViewState, action: ViewAction) -> Effect<Action> {
+    func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
-        case .userTapped:
+        case .cellTapped:
             return .none
         }
     }
@@ -31,21 +33,22 @@ struct FriendCore: Reducer {
 // MARK: - Feature View
 
 struct FriendCellView: View {
-    let name: String
-    let descrioption: String
+    let store: StoreOf<FriendCellCore>
     
     var body: some View {
-        HStack {
-            Image(systemName: "person.fill")
-                .resizable()
-                .renderingMode(.template)
-                .foregroundColor(.blue)
-                .frame(width: 40, height: 40)
-            VStack(alignment: .leading) {
-                Text(name)
-                    .font(.title2)
-                Text(descrioption)
-                    .font(.callout)
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            HStack {
+                (viewStore.image ?? Image("person.fill"))
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(.blue)
+                    .frame(width: 40, height: 40)
+                VStack(alignment: .leading) {
+                    Text(viewStore.userName)
+                        .font(.title2)
+                    Text(viewStore.description)
+                        .font(.callout)
+                }
             }
         }
     }
@@ -53,6 +56,17 @@ struct FriendCellView: View {
 
 struct ItemView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendCellView(name: "키오", descrioption: "키오입니다")
+        FriendCellView(
+            store: .init(
+                initialState:
+                        .init(
+                            userName: "키오",
+                            description: "키오입니다"
+                        ),
+                reducer: {
+                    FriendCellCore()
+                }
+            )
+        )
     }
 }
