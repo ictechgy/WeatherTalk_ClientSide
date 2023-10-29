@@ -21,12 +21,19 @@ final class AppCoordinator: Coordinator {
     }
     
     func makeMainView() -> some View {
-        let listView = FriendListView(store: self.store, coordinator: makeListCoordinator())
+        let listView = FriendListView(
+            store: .init(initialState: FriendListCore.State(friendList: .init()), reducer: {
+                FriendListCore()
+            }),
+            coordinator: makeListCoordinator()
+        )
         return NavigationControllerView(rootView: listView, navigationController: navigationController)
     }
     
     private func makeListCoordinator() -> FriendListCoordinator {
-        FriendListCoordinator(store: self.store, navigationController: self.navigationController)
+        FriendListCoordinator(store: .init(initialState: FriendListCore.State(friendList: .init()), reducer: {
+            FriendListCore()
+        }), navigationController: self.navigationController)
     }
 }
 
@@ -48,7 +55,6 @@ struct NavigationControllerView<RootContent: View>: UIViewControllerRepresentabl
 
 struct AppReducer: Reducer {
     struct State: Equatable {
-        var friendList: IdentifiedArrayOf<[User]> = []
     }
     
     enum Action {

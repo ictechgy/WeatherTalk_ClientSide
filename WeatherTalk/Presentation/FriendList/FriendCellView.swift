@@ -12,7 +12,8 @@ import ComposableArchitecture
 
 struct FriendCellCore: Reducer {
     // 어디서는 ViewState/ViewAction이라 하고 어디서는 State/Action이라 하는데 그 기준은?
-    struct State: Equatable {
+    struct State: Equatable, Identifiable {
+        var id: Int
         var image: Image?
         var userName: String
         var description: String
@@ -60,6 +61,8 @@ struct ItemView_Previews: PreviewProvider {
             store: .init(
                 initialState:
                         .init(
+                            id: 1,
+                            image: Image("person.fill"),
                             userName: "키오",
                             description: "키오입니다"
                         ),

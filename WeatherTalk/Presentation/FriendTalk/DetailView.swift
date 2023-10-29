@@ -24,7 +24,7 @@ import ComposableArchitecture
 
 struct DetailView: View {
     
-    let coordinator: DetailCoordinator
+//    let coordinator: DetailCoordinator
     let detailViewModel = DetailViewModel()
     
     var body: some View {
@@ -37,7 +37,7 @@ struct DetailView: View {
                 .padding()
                 
                 List(User.mock) { user in
-                    ItemView(name: user.name, descrioption: user.userDescription)
+//                    ItemView(name: user.name, descrioption: user.userDescription)
                         
                 }
             }
@@ -66,17 +66,17 @@ struct DetailView: View {
     }
 }
 
-struct DetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailView(coordinator: DetailCoordinator(navigationController: UINavigationController()))
-    }
-}
+//struct DetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DetailView(coordinator: DetailCoordinator(navigationController: UINavigationController()))
+//    }
+//}
 
-final class DetailCoordinator: Coordinator {
-    let navigationController: UINavigationController
-    private(set) var children: [Coordinator] = []
-    
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-    }
-}
+//final class DetailCoordinator: Coordinator {
+//    let navigationController: UINavigationController
+//    private(set) var children: [Coordinator] = []
+//    
+//    init(navigationController: UINavigationController) {
+//        self.navigationController = navigationController
+//    }
+//}
