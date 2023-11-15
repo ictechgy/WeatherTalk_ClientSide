@@ -23,8 +23,6 @@ import ComposableArchitecture
 //}
 
 struct DetailView: View {
-    
-//    let coordinator: DetailCoordinator
     let detailViewModel = DetailViewModel()
     
     var body: some View {
